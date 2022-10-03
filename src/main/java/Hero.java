@@ -1,8 +1,9 @@
 import com.googlecode.lanterna.TextCharacter;
+import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 
 public class Hero {
-    private Position position = new Position(0, 0);
+    private Position position = new Position(10, 10);
 
     public Hero(int x, int y){
         position.setX(x);
@@ -20,8 +21,4 @@ public class Hero {
     public Position moveDown() {return new Position(position.getX(), position.getY() + 1);}
     public Position moveLeft() {return new Position(position.getX() - 1, position.getY());}
     public Position moveRight() {return new Position(position.getX() + 1, position.getY());}
-
-    public void draw(TerminalScreen screen) {
-        screen.setCharacter(position.getX(), position.getY(), TextCharacter.fromCharacter('X')[0]);
-    }
 }
