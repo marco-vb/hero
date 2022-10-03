@@ -35,6 +35,17 @@ public class Game {
         screen.refresh();
     }
 
+    private void processKey (KeyStroke key) throws IOException {
+        if (key.getKeyType() == KeyType.ArrowUp) moveHero(hero.moveUp());
+        if (key.getKeyType() == KeyType.ArrowDown) moveHero(hero.moveDown());
+        if (key.getKeyType() == KeyType.ArrowRight) moveHero(hero.moveRight());
+        if (key.getKeyType() == KeyType.ArrowLeft) moveHero(hero.moveLeft());
+    }
+
+    private void moveHero(Position position) {
+        hero.setPosition(position);
+    }
+
     public void run() throws IOException {
         while (true){
             draw();
@@ -43,12 +54,5 @@ public class Game {
             if (key.getKeyType() == KeyType.EOF) break;
             processKey(key);
         }
-    }
-
-    private void processKey (KeyStroke key) throws IOException {
-        if (key.getKeyType() == KeyType.ArrowUp) hero.moveUp();
-        if (key.getKeyType() == KeyType.ArrowDown) hero.moveDown();
-        if (key.getKeyType() == KeyType.ArrowRight) hero.moveRight();
-        if (key.getKeyType() == KeyType.ArrowLeft) hero.moveLeft();
     }
 }
