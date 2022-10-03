@@ -1,6 +1,4 @@
-import com.googlecode.lanterna.TextCharacter;
-import com.googlecode.lanterna.screen.Screen;
-import com.googlecode.lanterna.screen.TerminalScreen;
+
 
 public class Hero {
     private Position position = new Position(10, 10);

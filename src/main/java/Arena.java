@@ -2,19 +2,18 @@ import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
-import com.googlecode.lanterna.screen.Screen;
-import com.googlecode.lanterna.screen.TerminalScreen;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Arena {
+public class Arena extends Element{
 
     private int height, width;
     private Hero hero = new Hero(10, 10);
     private List<Wall> walls;
 
-    public Arena(int h, int w) {this.height = h; this.width = w; this.walls = createWalls();}
+    public Arena(int h, int w) {
+        this.height = h; this.width = w; this.walls = createWalls();}
 
     private List<Wall> createWalls() {
         List<Wall> walls = new ArrayList<>();
@@ -44,8 +43,7 @@ public class Arena {
         return false;
     }
 
-    public void draw(Screen screen) {
-        TextGraphics graphics = screen.newTextGraphics();
+    public void draw(TextGraphics graphics) {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
         graphics.setForegroundColor(TextColor.Factory.fromString("#FFFF33"));
