@@ -13,9 +13,12 @@ public class Arena extends Element{
     private Hero hero = new Hero(10, 10);
     private List<Wall> walls;
     private List<Coin> coins;
+    private List<Monster> monsters;
 
     public Arena(int h, int w) {
-        this.height = h; this.width = w; this.walls = createWalls(); this.coins = createCoins();}
+        height = h; width = w; walls = createWalls();
+        coins = createCoins(); monsters = createMonsters();
+    }
 
     private List<Wall> createWalls() {
         List<Wall> walls = new ArrayList<>();
@@ -44,9 +47,42 @@ public class Arena extends Element{
         return coins;
     }
 
-    private void retrieveCoins(int i) {
-        coins.remove(i);
+    private void retrieveCoins(int i) {coins.remove(i);}
+
+    private List<Monster> createMonsters() {
+        Random r = new Random();
+        ArrayList<Monster> monsters = new ArrayList<>();
+        for (int i = 0; i < 10; i++){
+            Monster new_monster = new Monster(r.nextInt(width - 2) + 1, r.nextInt(height - 2) + 1);
+            while (new_monster.getPosition().equals(this.hero.getPosition()) ||
+                    monsters.contains(new_monster) ||
+                    !canHeroMove(new_monster.getPosition(), walls)) {
+                new_monster = new Monster(r.nextInt(width - 2) + 1, r.nextInt(height - 2));
+            }
+            monsters.add(new_monster);
+        }
+
+        return monsters;
     }
+
+    public void moveMonsters() {
+        for (Monster m : monsters){
+            Position m_pos = m.getPosition();
+            Position vector = new Position(hero.getX() - m_pos.getX(),
+                    m_pos.getY() - hero.getY());
+            int x_inc = vector.getX() > 0 ? 1 : -1;
+            int y_inc = vector.getY() > 0 ? -1 : 1;
+            if (vector.getX() == 0) {m.move(0, y_inc);}
+            if (vector.getY() == 0) {m.move(x_inc, 0);}
+            m.setPosition(m.move(x_inc, y_inc));
+        }
+    }
+
+    public void verifyMonsterCollisions() {
+
+    }
+
+
     private void moveHero(Position position) {
         if (canHeroMove(position, this.walls)) {
             int index = -1;
@@ -79,13 +115,17 @@ public class Arena extends Element{
             wall.draw(graphics);
         for (Coin c : coins)
             c.draw(graphics);
-        graphics.putString(new TerminalPosition(hero.getX(), hero.getY()), "X");
+        for (Monster m : monsters)
+            m.draw(graphics);
+        hero.draw(graphics);
     }
     public void processKey(KeyStroke key){
         if (key.getKeyType() == KeyType.ArrowUp) moveHero(hero.moveUp());
         if (key.getKeyType() == KeyType.ArrowDown) moveHero(hero.moveDown());
         if (key.getKeyType() == KeyType.ArrowRight) moveHero(hero.moveRight());
         if (key.getKeyType() == KeyType.ArrowLeft) moveHero(hero.moveLeft());
+
+        moveMonsters();
     }
 
 }

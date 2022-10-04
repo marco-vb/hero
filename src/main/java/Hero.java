@@ -1,6 +1,8 @@
+import com.googlecode.lanterna.TerminalPosition;
+import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.graphics.TextGraphics;
 
-
-public class Hero {
+public class Hero extends Element{
     private Position position = new Position(10, 10);
 
     public Hero(int x, int y){
@@ -12,6 +14,13 @@ public class Hero {
         position.setX(pos.getX());
         position.setY(pos.getY());
     }
+
+    @Override
+    public void draw(TextGraphics graphics) {
+        graphics.setForegroundColor(TextColor.Factory.fromString("#ffffff"));
+        graphics.putString(new TerminalPosition(this.getX(), this.getY()), "X");
+    }
+
     public int getX() {return position.getX();}
     public int getY() {return position.getY();}
 

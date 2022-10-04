@@ -14,8 +14,8 @@ import java.util.Random;
 
 public class Game {
 
-    Screen screen;
-    int width = 60, height = 30;
+    private Screen screen;
+    private int width = 60, height = 30;
     private Arena arena = new Arena(height, width);
 
     public Game() {
@@ -23,16 +23,14 @@ public class Game {
             TerminalSize terminalSize = new TerminalSize(width, height);
             DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setInitialTerminalSize(terminalSize);
             Terminal terminal = terminalFactory.createTerminal();
-            this.screen = new TerminalScreen(terminal);
+            screen = new TerminalScreen(terminal);
 
 
             screen.setCursorPosition(null); // we don't need a cursor
             screen.startScreen(); // screens must be started
             screen.doResizeIfNecessary(); // resize screen if necessary
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) {e.printStackTrace();}
     }
 
     private void draw() throws IOException {
