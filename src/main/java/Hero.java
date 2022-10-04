@@ -15,6 +15,8 @@ public class Hero {
     public int getX() {return position.getX();}
     public int getY() {return position.getY();}
 
+    public Position getPosition() {return this.position;}
+
     public Position moveUp() {return new Position(position.getX(), position.getY() - 1);}
     public Position moveDown() {return new Position(position.getX(), position.getY() + 1);}
     public Position moveLeft() {return new Position(position.getX() - 1, position.getY());}

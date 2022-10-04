@@ -8,11 +8,14 @@ import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class Game {
 
     Screen screen;
-    int width = 40, height = 20;
+    int width = 60, height = 30;
     private Arena arena = new Arena(height, width);
 
     public Game() {
@@ -42,7 +45,6 @@ public class Game {
     private void processKey (KeyStroke key) throws IOException {
         arena.processKey(key);
     }
-
 
     public void run() throws IOException {
         while (true){
