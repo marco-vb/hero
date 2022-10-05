@@ -52,7 +52,7 @@ public class Arena extends Element{
     private List<Monster> createMonsters() {
         Random r = new Random();
         ArrayList<Monster> monsters = new ArrayList<>();
-        for (int i = 0; i < 10; i++){
+        for (int i = 0; i < 3; i++){
             Monster new_monster = new Monster(r.nextInt(width - 2) + 1, r.nextInt(height - 2) + 1);
             while (new_monster.getPosition().equals(this.hero.getPosition()) ||
                     monsters.contains(new_monster) ||
@@ -78,11 +78,6 @@ public class Arena extends Element{
         }
     }
 
-    public void verifyMonsterCollisions() {
-
-    }
-
-
     private void moveHero(Position position) {
         if (canHeroMove(position, this.walls)) {
             int index = -1;
@@ -105,6 +100,14 @@ public class Arena extends Element{
             return true;
         return false;
     }
+
+    public boolean verifyMonsterCollisions() {
+        for (Monster m : monsters)
+            if (m.getPosition().equals(hero.getPosition())) return true;
+
+        return false;
+    }
+
 
     public void draw(TextGraphics graphics) {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));

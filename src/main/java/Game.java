@@ -51,6 +51,11 @@ public class Game {
             if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') screen.close();
             if (key.getKeyType() == KeyType.EOF) break;
             processKey(key);
+            if (arena.verifyMonsterCollisions()) {
+                System.out.println("GAME OVER");
+                screen.close();
+                break;
+            }
         }
     }
 }
