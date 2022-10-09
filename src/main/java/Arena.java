@@ -10,6 +10,7 @@ import java.util.Random;
 public class Arena extends Element{
 
     private int height, width;
+    private int num_coins = 10, num_monsters = 5;
     private Hero hero = new Hero(10, 10);
     private List<Wall> walls;
     private List<Coin> coins;
@@ -37,7 +38,7 @@ public class Arena extends Element{
     private List<Coin> createCoins() {
         Random r = new Random();
         ArrayList<Coin> coins = new ArrayList<>();
-        for (int i = 0; i < 5; i++){
+        for (int i = 0; i < num_coins; i++){
             Coin new_coin = new Coin(r.nextInt(width - 2) + 1, r.nextInt(height - 2) + 1);
             while (new_coin.getPosition().equals(this.hero.getPosition()) || coins.contains(new_coin)) {
                 new_coin = new Coin(r.nextInt(width - 2) + 1, r.nextInt(height - 2));
@@ -49,10 +50,12 @@ public class Arena extends Element{
 
     private void retrieveCoins(int i) {coins.remove(i);}
 
+    public int getCoinNum() {return coins.size();}
+
     private List<Monster> createMonsters() {
         Random r = new Random();
         ArrayList<Monster> monsters = new ArrayList<>();
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < num_monsters; i++){
             Monster new_monster = new Monster(r.nextInt(width - 2) + 1, r.nextInt(height - 2) + 1);
             while (new_monster.getPosition().equals(this.hero.getPosition()) ||
                     monsters.contains(new_monster) ||
@@ -66,7 +69,9 @@ public class Arena extends Element{
     }
 
     public void moveMonsters() {
-        for (Monster m : monsters){
+        // this makes monsters always move towards you, which makes
+        // the game impossible
+        /*for (Monster m : monsters){
             Position m_pos = m.getPosition();
             Position vector = new Position(hero.getX() - m_pos.getX(),
                     m_pos.getY() - hero.getY());
@@ -75,16 +80,24 @@ public class Arena extends Element{
             if (vector.getX() == 0) {m.move(0, y_inc);}
             if (vector.getY() == 0) {m.move(x_inc, 0);}
             m.setPosition(m.move(x_inc, y_inc));
+        }*/
+
+        for (Monster m : monsters) {
+            Random r = new Random();
+            int x_inc, y_inc;
+            do {
+                x_inc = r.nextInt(3) - 1;
+                y_inc = r.nextInt(3) - 1;
+            } while (!canHeroMove(m.move(x_inc, y_inc), walls));
+            m.setPosition(m.move(x_inc, y_inc));
         }
     }
 
     private void moveHero(Position position) {
         if (canHeroMove(position, this.walls)) {
-            int index = -1;
             for (int i = 0; i < this.coins.size(); i++)
                 if (coins.get(i).getPosition().equals(this.hero.getPosition())) {
-                    index = i;
-                    retrieveCoins(index);
+                    retrieveCoins(i);
                     break;
                 }
 
@@ -96,9 +109,7 @@ public class Arena extends Element{
         for (Wall w : walls)
             if (w.getPosition().equals(pos)) return false;
 
-        if (pos.getX() >= 0 && pos.getX() < this.width && pos.getY() >= 0 && pos.getY() < this.height)
-            return true;
-        return false;
+        return pos.getX() >= 0 && pos.getX() < width && pos.getY() >= 0 && pos.getY() < height;
     }
 
     public boolean verifyMonsterCollisions() {
@@ -110,10 +121,8 @@ public class Arena extends Element{
 
 
     public void draw(TextGraphics graphics) {
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
+        graphics.setBackgroundColor(TextColor.Factory.fromString("#1F2B37"));
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
-        graphics.setForegroundColor(TextColor.Factory.fromString("#FFFF33"));
-        graphics.enableModifiers(SGR.BOLD);
         for (Wall wall : walls)
             wall.draw(graphics);
         for (Coin c : coins)
@@ -127,8 +136,6 @@ public class Arena extends Element{
         if (key.getKeyType() == KeyType.ArrowDown) moveHero(hero.moveDown());
         if (key.getKeyType() == KeyType.ArrowRight) moveHero(hero.moveRight());
         if (key.getKeyType() == KeyType.ArrowLeft) moveHero(hero.moveLeft());
-
         moveMonsters();
     }
-
 }

@@ -3,22 +3,14 @@ import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 
 public class Wall extends Element{
-    private int x, y;
-    public Wall(int x, int y) {this.x = x; this.y = y;}
+    private Position position;
+    public Wall(int x, int y) {position = new Position(x, y);}
+    public Position getPosition() {return position;}
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public Position getPosition() {return new Position(this.x, this.y);}
-
+    @Override
     public void draw(TextGraphics graphics) {
-        graphics.setForegroundColor(TextColor.Factory.fromString("#12FBED"));
-        graphics.putString(new TerminalPosition(this.getX(), this.getY()), "/");
+        graphics.setForegroundColor(TextColor.Factory.fromString("#599F89"));
+        graphics.putString(new TerminalPosition(position.getX(), position.getY()), "X");
     }
 
 }
